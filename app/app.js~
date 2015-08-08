@@ -1,0 +1,170 @@
+var app = angular.module('myApp', ['ui.bootstrap','ngRoute']);
+//Add this to have access to a global variable
+
+
+
+app.filter('startFrom', function() {
+    return function(input, start) {
+        if(input) {
+            start = +start; //parse to int
+            return input.slice(start);
+        }
+        return [];
+    }
+});
+
+
+    app.config(function($routeProvider) {
+        $routeProvider
+
+            // route for the home page
+            .when('/generar', {
+                templateUrl : 'generar.html',
+                controller  : 'generarControlador'
+            })
+
+            // route for the about page
+            .when('/', {
+                templateUrl : 'auxiliares.html',
+                controller  : 'customersCrtl'
+            })
+
+            ;
+            
+    });
+
+app.controller('generarControlador', function($scope,$http) {
+        // create a message to display in our view
+        $scope.myForm = {};
+            $scope.myForm.empresa  = ["1"];
+
+            $scope.myForm.options = [{ id : "1", nombre: "FCAB" }
+             ,{ id : "2", nombre: "TRAIN" }
+             ,{ id : "3"  , nombre: "Shippers" }
+             ];
+
+       
+
+          $scope.Generar= function(){   
+            $scope.display=true;        
+            $http.post('ajax/generar_existencia.php?empresa='+$scope.myForm.empresa+"&fecha_consulta="+$scope.myForm.fecha_cierre).success(function(data){
+
+                if(!data.success){
+                  //  $scope.errorEmpresa = data.errors.empresa;
+                   // $scope.errorFechaR = data.errors.fechar;
+                   // $scope.errorFechaC = data.errors.fechac;
+                   $scope.message = data.message;
+                   //console.log(data);
+                  $scope.display=false;   
+                } else{
+                    $scope.message = data.message;
+                    $scope.resetForm();
+                    $scope.display=false;   
+                }
+
+            });
+          };
+
+          $scope.resetForm = function(){
+            $scope.myForm.empresa = null;
+            $scope.myForm.fecha_cierre = null;
+          
+          }
+    });
+    
+
+app.controller('customersCrtl', function ($scope, $http, $timeout,$window) {
+    getMateriales();
+
+    function getMateriales(){
+    $http.get('ajax/getMateriales2.php').success(function(data){
+        $scope.list = data;
+        $scope.currentPage = 1; //current page
+        $scope.entryLimit = 10; //max no of items to display in a page
+        $scope.filteredItems = $scope.list.length; //Initially for no filter  
+        $scope.totalItems = $scope.list.length;
+        });
+    };
+
+ 
+    $scope.setLoading= function(loading){
+         $scope.display = loading;
+    };
+
+    $scope.setPage = function(pageNo) {
+        $scope.currentPage = pageNo;
+    };
+    $scope.filter = function() {
+        $timeout(function() { 
+            $scope.filteredItems = $scope.filtered.length;
+        }, 10);
+    };
+    $scope.sort_by = function(predicate) {
+        $scope.predicate = predicate;
+        $scope.reverse = !$scope.reverse;
+    };
+
+    
+    $scope.checkAll = function () {
+        if ($scope.selectedAll) {
+            $scope.selectedAll = false;
+        } else {
+            $scope.selectedAll = true;
+        }
+        angular.forEach($scope.filtered, function (data) {
+            data.Selected = $scope.selectedAll;
+        });
+
+    };
+
+    $scope.getListado = function(cod_empresa,nro_version,fecha_consulta) {
+       // alert("empresa:" + cod_empresa+ " version: "+nro_version);
+         
+       $scope.$on('myPostRepeatDirective', function(scope, element, attrs){  
+                //work your magic   
+                     
+          $scope.exportData(cod_empresa,nro_version,fecha_consulta); 
+
+         
+        
+       });
+
+    
+       $scope.setLoading(true);
+        $http.get("ajax/listado.php?cod_empresa="+cod_empresa+"&nro_version="+nro_version).success(function(data2){
+        $scope.listado2 = data2;   
+       // exportData();
+       //getMateriales(); 
+       // setTimeout(200);
+
+        });
+   
+    };
+       
+
+    $scope.exportData = function (cod_empresa,nro_version,fecha_consulta) {     
+        
+
+        var blob = new Blob([document.getElementById('exportable').innerHTML], {
+            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
+        });
+     
+       saveAs(blob, 'ResumenExistencia_Emp_'+cod_empresa+'_Fecha_'+fecha_consulta+'_version_'+nro_version+'.xls'); 
+      //  saveAs(blob, 'ResumenExistencia.xls'); 
+       
+          $scope.setLoading(false);
+      $timeout(function() {  }, 0); // wait...
+    }
+
+    
+});
+
+
+
+ app.directive('myPostRepeatDirective', function() {
+  return function(scope, element, attrs) {
+    if (scope.$last)setTimeout(function(){
+                scope.$emit('myPostRepeatDirective', element, attrs);
+            }, 1);
+    }
+  });

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html ng-app="myApp" ng-app lang="es">
+<head>
+    <meta charset="utf-8">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+     <link rel="stylesheet" type="text/css" href="css/taskman.css"/>
+      <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+     <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <style type="text/css">
+    ul>li, a{cursor: pointer;}
+	.table { border: 1px solid #2980B9; }
+.table thead > tr > th { border-bottom: none; }
+.table thead > tr > th, .table tbody > tr > th, .table tfoot > tr > th, .table thead > tr > td, .table tbody > tr > td, .table tfoot > tr > td { border: 1px solid #2980B9; }
+    </style>
+    <title>Facturas 9 Rutas</title>
+</head>
+<body ng-controller="facturasCrtl">
+<div class="navbar navbar-default" id="navbar">
+    <div class="container" id="navbar-container">
+  <div class="navbar-header">
+    <a href="#" class="navbar-brand">
+      <small>
+        <i class="glyphicon glyphicon glyphicon-circle-arrow-down"></i>
+        Facturas
+      </small>
+    </a><!-- /.brand -->
+    <a href="#enviadas" class="navbar-brand">
+      <small>
+        <i class="glyphicon glyphicon glyphicon-cog"></i>
+        Enviadas
+      </small>
+    </a><!-- /.brand -->
+     <a href="#notas" class="navbar-brand">
+      <small>
+        <i class="glyphicon glyphicon glyphicon-cog"></i>
+        NC - ND
+      </small>
+    </a><!-- /.brand -->
+
+  </div><!-- /.navbar-header -->
+  <!--<div class="navbar-header pull-right" role="navigation">
+        <a href="http://angularcode.com/simple-task-manager-application-using-angular-js-php-mysql/" class="btn btn-sm btn-danger nav-button-margin"> <i class="glyphicon glyphicon-book"></i>&nbsp;Tutorial Link</a>
+        <a href="http://angularcode.com/download-link/?url=https://app.box.com/s/8e2hjljpurg47wi8h0ec" class="btn btn-sm btn-warning nav-button-margin"> <i class="glyphicon glyphicon-download"></i>&nbsp;Download Project</a>
+  </div>-->
+  </div>
+  </div>
+
+<div id="main">
+  
+    <!-- angular templating -->
+    <!-- this is where content will be injected -->
+    <div ng-view></div>
+    
+  </div>
+<footer class="text-center">
+ <img ng-src="logotrain.png" />
+  </footer>
+
+<script src="js/angular.min.js"></script>
+<script src="js/ui-bootstrap-tpls-0.10.0.min.js"></script>
+<script src="app/app.js"></script>
+<script src="js/angular-route.js"></script> 
+    </body>
+</html>

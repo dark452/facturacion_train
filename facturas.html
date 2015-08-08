@@ -1,0 +1,100 @@
+<div class="jumbotron text-center">
+	
+
+<h2><span class="glyphicon glyphicon-circle-arrow-down"></span>Facturas Nueve Rutas</h2>
+<br>
+
+  <div class="container">
+        <div class="row well well-lg clearfix">
+        <div class="row well well-lg widget-header header-color-grey">
+
+        <p></p>        
+        <div class="col-md-1"><i class="glyphicon glyphicon glyphicon-search"></i></div>
+        <div class="col-md-2">Resultados por página:
+        <select ng-model="entryLimit" class="form-control">
+                <option>5</option>
+                <option>10</option>
+                <option>20</option>
+                <option>50</option>
+                <option>100</option>
+            </select>
+        </div>
+
+        <div class="col-md-3">Filtro:
+            <input type="text" ng-model="search" ng-change="filter()" placeholder="Filtro" class="form-control"/>
+            <br>
+        </div>
+        <div class="row">
+        <div class="col-md-4">
+            <h5>Filtrado {{ filtered.length }} de {{ totalItems}} total </h5>
+        </div>
+        </div>
+        </div>
+
+    
+    <br/>
+    <div class="row">
+        <div class="col-md-12" ng-show="filteredItems > 0">
+            <table class="table table-striped table-bordered table-condensed table-hover" width="80%">
+            <thead>
+            <th>Folio 1&nbsp;<a ng-click="sort_by('nro_fact_9rutas');"><i class="glyphicon glyphicon-sort"></i></a></th>
+            <th>Folio 2&nbsp;<a ng-click="sort_by('numerodocumento');"><i class="glyphicon glyphicon-sort"></i></a></th>            
+			<th>Tipo docto&nbsp;<a ng-click="sort_by('codigoelectronico');"><i class="glyphicon glyphicon-sort"></i></a></th>
+			<th>Rut Cliente&nbsp;<a ng-click="sort_by('rut_cliente');"><i class="glyphicon glyphicon-sort"></i></a></th>
+			<th>fecha de emision&nbsp;<a ng-click="sort_by('fechaemision');"><i class="glyphicon glyphicon-sort"></i></a></th>
+			<th>Glosa&nbsp;<a ng-click="sort_by('glosa');"><i class="glyphicon glyphicon-sort"></i></a></th>
+			<th>Neto&nbsp;<a ng-click="sort_by('neto');"><i class="glyphicon glyphicon-sort"></i></a></th>
+			<th>IVA&nbsp;<a ng-click="sort_by('iva');"><i class="glyphicon glyphicon-sort"></i></a></th>
+			<th>Cantidad de items 9 rutas&nbsp;<a ng-click="sort_by('cantidad');"><i class="glyphicon glyphicon-sort"></i></a></th>
+			<th>Cantidad de items Interfaz&nbsp;<a ng-click="sort_by('cantidad2');"><i class="glyphicon glyphicon-sort"></i></a></th>
+			<th>Total 9 rutas&nbsp;<a ng-click="sort_by('total1');"><i class="glyphicon glyphicon-sort"></i></a></th>
+			<th>Total interfaz&nbsp;<a ng-click="sort_by('total2');"><i class="glyphicon glyphicon-sort"></i></a></th>
+			<th>TON 9 Rutas&nbsp;<a ng-click="sort_by('ton1');"><i class="glyphicon glyphicon-sort"></i></a></th>
+			<th>TON interfaz&nbsp;<a ng-click="sort_by('ton2');"><i class="glyphicon glyphicon-sort"></i></a></th>
+			<th>Opción</th>
+            </thead>
+            <tbody>
+                <tr ng-repeat="data in filtered = (list | filter:search | orderBy : predicate :reverse) | startFrom:(currentPage-1)*entryLimit | limitTo:entryLimit">                    
+                   <!-- <td><input type="checkbox" ng-model="data.Selected" /></td>-->
+                  <!-- <td><div class="btn pull-center" ><button class="btn btn-sm btn-danger header-elements-margin" ng-click="getListado(data.COD_EMPRESA,data.NRO_VERSION,data.FECHA_CONSULTA)" ><i class="glyphicon glyphicon-plus"></i>Exportar a Excel</button> </div></td>-->
+                    <td><div ng-if="data.nro_fact_9rutas<1">SIN FOLIO</div><div ng-else>{{data.nro_fact_9rutas}}</div></td>
+                    <td>{{data.numerodocumento}}</td>                  
+					<td>{{data.codigoelectronico}}</td>
+					<td>{{data.rut_cliente}}</td>
+					<td>{{data.fechaemision}}</td>
+					<td> <div ng-if="data.glosa<1">SIN GLOSA</div><div ng-else>{{data.glosa}}</div></td>
+					<td>{{data.neto}}</td>
+					<td>{{data.iva}}</td>
+					<td><div ng-if="data.cantidad<1">SIN VALOR</div><div ng-elfe>{{data.cantidad}}</div></td>
+					<td><div ng-if="data.cantidad!=data.cantidad2" ng-style="{'background-color':'red'}">{{data.cantidad2}}</div><div ng-else>{{data.cantidad2}}</div></td>
+					<td><div ng-if="data.total1<1">SIN VALOR</div><div ng-else>{{data.total1}}</div></td>
+					<td><div ng-if="data.total2!=data.total1 && data.total2<1" ng-style="{'background-color':'red'}">{{data.total2}}</div><div ng-elfe>{{data.total2}}</div></td>
+					<td><div ng-if="data.ton1<1">SIN VALOR</div><div ng-else>{{data.ton1}}</div></td>
+					<td><div ng-if="data.ton2<1">SIN VALOR</div><div ng-else>{{data.ton2}}</div></td>
+					<td><div ng-if="data.total2-data.total1>10 || data.total2-data.total1<-10"><div class="btn pull-center" ><button class="btn btn-sm btn-danger header-elements-margin" ng-click="Sincronizar(data.nro_fact_9rutas,data.codigoelectronico)" ><i class="glyphicon glyphicon-retweet"></i> Sincronizar</button><div></div><button class="btn btn-sm btn-success header-elements-margin" ng-click="Redondear(data.nro_fact_9rutas,data.codigoelectronico,data.ton2-data.ton1)" ><i class="glyphicon glyphicon-wrench"></i> Redondear</button></div></div><div ng-else="data.total2==data.total1"><div class="btn pull-center" ><button class="btn btn-sm btn-warning header-elements-margin" ng-click="Traspasar(data.nro_fact_9rutas,data.codigoelectronico)" ><i class="glyphicon glyphicon-send"></i> Traspasar <br>VTAFAC</br></button></div></div></td>
+                </tr>
+            </tbody>
+            </table>
+        </div>
+         <div id="overlay" ng-show="display" style="text-align:center">
+            <img ng-src="loader.gif" width="300" height="300" />
+        </div>
+        <div id="fade" ng-show="display"></div>
+      
+        <div class="col-md-12" ng-show="filteredItems == 0">
+            <div class="col-md-12">
+                <h4>No exiten registros</h4>
+            </div>
+        </div>
+        <div class="col-md-12" ng-show="filteredItems > 0">    
+            <div pagination="" page="currentPage" on-select-page="setPage(page)" boundary-links="true" total-items="filteredItems" items-per-page="entryLimit" class="pagination-small" previous-text="&laquo;" next-text="&raquo;"></div>
+            
+            
+        </div>
+    </div>
+
+</div>
+
+   </div>
+
+</div>

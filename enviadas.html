@@ -1,0 +1,95 @@
+<div class="jumbotron text-center">
+	
+
+<h2><span class="glyphicon glyphicon-circle-arrow-down"></span>Facturas de Nueve Rutas enviadas a PPL</h2>
+<br>
+
+  <div class="container">
+        <div class="row well well-lg clearfix">
+        <div class="row well well-lg widget-header header-color-grey">
+
+        <p></p>        
+        <div class="col-md-1"><i class="glyphicon glyphicon glyphicon-search"></i></div>
+        <div class="col-md-2">Resultados por página:
+        <select ng-model="entryLimit" class="form-control">
+                <option>5</option>
+                <option>10</option>
+                <option>20</option>
+                <option>50</option>
+                <option>100</option>
+            </select>
+        </div>
+
+        <div class="col-md-3">Filtro:
+            <input type="text" ng-model="search" ng-change="filter()" placeholder="Filtro" class="form-control"/>
+            <br>
+        </div>
+        <div class="row">
+        <div class="col-md-4">
+            <h5>Filtrado {{ filtered.length }} de {{ totalItems}} total </h5>
+        </div>
+        </div>
+        </div>
+
+    
+    <br/>
+    <div class="row">
+        <div class="col-md-12" ng-show="filteredItems > 0">
+            <table class="table table-striped table-bordered table-condensed table-hover" width="80%">
+            <thead>
+            <th>Folio 9 Rutas&nbsp;<a ng-click="sort_by('GRP_FACT');"><i class="glyphicon glyphicon-sort"></i></a></th>
+            <th>Folio PPL&nbsp;<a ng-click="sort_by('NRO_FACT');"><i class="glyphicon glyphicon-sort"></i></a></th>            
+			<th>Tipo docto&nbsp;<a ng-click="sort_by('TIPO_FACT');"><i class="glyphicon glyphicon-sort"></i></a></th>
+			<th>Rut Cliente&nbsp;<a ng-click="sort_by('RUT_CLIENTE');"><i class="glyphicon glyphicon-sort"></i></a></th>
+            <th>Nombre Cliente&nbsp;<a ng-click="sort_by('NOMBRE_CLIENTE');"><i class="glyphicon glyphicon-sort"></i></a></th>
+			<th>fecha de emisión&nbsp;<a ng-click="sort_by('FECHA_FACT');"><i class="glyphicon glyphicon-sort"></i></a></th>			
+			<th>Neto Pesos&nbsp;<a ng-click="sort_by('NETO_PESOS');"><i class="glyphicon glyphicon-sort"></i></a></th>
+			<th>IVA Pesos&nbsp;<a ng-click="sort_by('IVA_PESOS');"><i class="glyphicon glyphicon-sort"></i></a></th>	
+            <th>Total Pesos&nbsp;<a ng-click="sort_by('TOTAL_PESOS');"><i class="glyphicon glyphicon-sort"></i></a></th>
+            <th>Neto Dolar&nbsp;<a ng-click="sort_by('NETO_DOLAR');"><i class="glyphicon glyphicon-sort"></i></a></th>   
+            <th>Total Dolar&nbsp;<a ng-click="sort_by('TOTAL_DOLAR');"><i class="glyphicon glyphicon-sort"></i></a></th>  		
+			<!--<th>Total &nbsp;<a ng-click="sort_by('total2');"><i class="glyphicon glyphicon-sort"></i></a></th>-->
+			<th>Ver</th>		
+            </thead>
+            <tbody>
+                <tr ng-repeat="data in filtered = (list | filter:search | orderBy : predicate :reverse) | startFrom:(currentPage-1)*entryLimit | limitTo:entryLimit">                    
+                   <!-- <td><input type="checkbox" ng-model="data.Selected" /></td>-->
+                  <!-- <td><div class="btn pull-center" ><button class="btn btn-sm btn-danger header-elements-margin" ng-click="getListado(data.COD_EMPRESA,data.NRO_VERSION,data.FECHA_CONSULTA)" ><i class="glyphicon glyphicon-plus"></i>Exportar a Excel</button> </div></td>-->
+                    <td>{{data.GRP_FACT}}</td>
+                    <td>{{data.NRO_FACT}}</td>                  
+					<td>{{data.TIPO_FACT}}</td>
+					<td>{{data.RUT_CLIENTE}}</td>
+                    <td>{{data.NOMBRE_CLIENTE}}</td>
+					<td>{{data.FECHA_FACT}}</td>					
+					<td>{{data.NETO_PESOS}}</td>
+					<td>{{data.IVA_PESOS}}</td>
+                    <td>{{data.TOTAL_PESOS}}</td>
+                    <td>{{data.NETO_DOLAR}}</td>
+                    <td>{{data.TOTAL_DOLAR}}</td>
+					<td><button class="btn btn-sm btn-danger header-elements-margin" ng-click="Ver(data.NRO_FACT, data.TIPO_FACT)"><i class="glyphicon glyphicon-file">VER</i></button></td>
+                </tr>
+            </tbody>
+            </table>
+        </div>
+         <div id="overlay" ng-show="display" style="text-align:center">
+            <img ng-src="loader.gif" width="300" height="300" />
+        </div>
+        <div id="fade" ng-show="display"></div>
+      
+        <div class="col-md-12" ng-show="filteredItems == 0">
+            <div class="col-md-12">
+                <h4>No exiten registros</h4>
+            </div>
+        </div>
+        <div class="col-md-12" ng-show="filteredItems > 0">    
+            <div pagination="" page="currentPage" on-select-page="setPage(page)" boundary-links="true" total-items="filteredItems" items-per-page="entryLimit" class="pagination-small" previous-text="&laquo;" next-text="&raquo;"></div>
+            
+            
+        </div>
+    </div>
+
+</div>
+
+   </div>
+
+</div>

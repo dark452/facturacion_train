@@ -1,0 +1,22 @@
+<?php
+
+require '../include/config_bd.php';
+$oci = oci_connect($usuario,$contrasena,$urlDatos);
+if (!$oci) {
+    $e = oci_error();
+    trigger_error(htmlentities($e['message'], ENT_QUOTES), E_USER_ERROR);
+}
+
+$query = "select DECODE(cod_empresa,1,'FCAB',2,'TRAIN',3,'SHIPPERS', 49,'AWT')NOMBRE, cod_empresa, TO_CHAR(fecha_consulta,"."'DD/MM/YYYY'".") fecha_consulta ,nro_version from sab_audi_semestre_emp group by cod_empresa, fecha_consulta,nro_version";
+
+$stid = oci_parse($oci, $query);
+oci_execute($stid);
+
+oci_fetch_all($stid, $data, 0, -1, OCI_ASSOC + OCI_FETCHSTATEMENT_BY_ROW);
+
+header("Content-Type: application/json");
+echo json_encode($data);
+
+oci_close($oci);
+
+?>
